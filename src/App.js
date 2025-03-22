@@ -13,13 +13,18 @@ function App() {
         ))}
 
         {/* Private Routes */}
-        {privateRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<PrivateRoute>{route.element}</PrivateRoute>}
-          />
-        ))}
+        {privateRoutes.map((route) => (
+        <Route
+          key={route.path}
+          path={route.path}
+          element={<PrivateRoute>{route.element}</PrivateRoute>}
+        >
+          {route.children &&
+            route.children.map((child) => (
+              <Route key={child.path} path={child.path} element={child.element} />
+            ))}
+        </Route>
+      ))}
       </Routes>
     </div>
   );

@@ -1,33 +1,29 @@
-// src/routes.js
 import { Navigate } from 'react-router-dom';
-
 import Login from './components/Auth/Login/login';
-import Dashboard from './components/Auth/Dashboard';
+import Dashboard from './components/Auth/Dashboard/Dashboard';
+import DashboardHome from './components/Pages/home'
+import Profile from './components/Pages/Profile';
 
-// Public routes (accessible by anyone)
 export const publicRoutes = [
   { path: '/', element: <Login /> },
   { path: '/about', element: <Login /> },
   { path: '/login', element: <Login /> },
 ];
 
-// Private routes (require authentication)
 export const privateRoutes = [
-  { path: '/dashboard', element: <Dashboard /> },
-  { path: '/profile', element: <Login /> },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+    children: [
+      { path: '', element: <DashboardHome /> }, // Default dashboard page
+      { path: 'profile', element: <Profile /> }, // Profile page
+    ],
+  },
 ];
 
-// Wrapper component for private routes
 export const PrivateRoute = ({ children }) => {
-  const isAuthenticated = true; 
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return children;
+  const isAuthenticated = true; // Replace with actual auth logic
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
-export const PublicRoute = ({ children }) => {
-  return children;
-};
+export const PublicRoute = ({ children }) => children;
